@@ -199,11 +199,13 @@
     @media (min-width: 640px) { .card { padding: 1.85rem 2rem; } }
 
     .card-head { display: flex; flex-direction: column; gap: 0.3rem; }
+    .card-heading { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
     .card-title {
       font-family: var(--font-display);
       font-size: 1.6rem; line-height: 1.25; font-weight: 500;
       transition: color .2s;
     }
+    .card-author { font-size: 0.9rem; font-style: italic; color: var(--muted); }
     .card-date { font-size: 0.875rem; color: var(--muted); white-space: nowrap; }
     .card-excerpt {
       display: block;
@@ -302,6 +304,7 @@
       font-family: var(--font-display);
       font-weight: 500; font-size: 2.5rem; line-height: 1.1; letter-spacing: -0.015em;
     }
+    .piece-author { font-size: 1.05rem; font-style: italic; color: var(--muted); margin-top: 0.85rem; }
     .piece-header::after { content: ""; display: block; width: 3rem; height: 3px; border-radius: 3px; background: var(--gold); margin-top: 1.75rem; }
     @media (min-width: 640px) {
       .piece-header { margin-bottom: 3.75rem; }
@@ -414,6 +417,9 @@
        - works:  every piece you publish. Add a new object to
                  the list and it appears in the right tab.
          type:   "poems" | "stories" | "essays"
+         author: optional. The writer's name for guest pieces.
+                 Leave it out and the piece is credited to
+                 author.byline.
          lang:   optional. Use "ml" for Malayalam pieces so the
                  browser shapes and spaces the script correctly.
          body:   Write inside backticks (` `). For poems, separate
@@ -425,6 +431,7 @@
        ========================================================= */
     const author = {
       name: "Sony Vadasseril",
+      byline: "Dr. Sony Varghese Vadasseril",   // shown under titles when a piece has no author
       tagline: "Poems, short stories, and essays...",
       about: [
         "I write poems, short fiction, and the occasional essay. I live somewhere with a lot of rain and not enough bookshelves.",
@@ -451,11 +458,11 @@
 തെറ്റിയ വരകളും തെളിയാത്ത കുറിയും
 ഒറ്റവരി കഥകളും നൂറുവരി കാര്യവും
 മഷി പടരാതെ പോയൊരു പ്രണയവും
-കുറിച്ചതൊരുപാടു മായ്ച്ചു നീയെന്നും 
+കുറിച്ചതൊരുപാടു മായ്ച്ചു നീയെന്നും
 
 മനസ്സിൽ കോറിയ അറിവിൻ വെളിച്ചവും
 നെഞ്ചിൽ പതയുന്ന ഓർമ്മതിരകളും
-മായ്ക്ക് ഡബ്ബറിനും  മായിക്കാനാവില്ലെന്ന് 
+മായ്ക്ക് ഡബ്ബറിനും  മായിക്കാനാവില്ലെന്ന്
 ഇന്നറിയുന്നു ഞാൻ വൈകിയാണെങ്കിലും
 
 നീ തൊടാതെ പോയ കുഞ്ഞുവരകളും,
@@ -469,20 +476,20 @@
         lang: "ml",
         title: "വേരിലും ചിറകിലും",
         date: "2026-06-02",
-        body: `പാറണം പറക്കണം നീ അക്ഷരമുറ്റത്ത് 
+        body: `പാറണം പറക്കണം നീ അക്ഷരമുറ്റത്ത്
 വാക്കിലും നോക്കിലും പൂമ്പൊടി പരത്തണം
-വാനിലെ വർണ്ണങ്ങൾ വാരി നീ കൂട്ടണം 
+വാനിലെ വർണ്ണങ്ങൾ വാരി നീ കൂട്ടണം
 പാദങ്ങൾ എന്നുമീ ഭൂമിയിൽ നിൽക്കണം
 
-തുള്ളിയായി കൂടണം മഴയായി പെയ്യണം    
-ഹിമകണമായ് നീ വേരിൽ പടരണം 
-പുഴയായി ഒഴുകണം, ഒഴുകിയിറങ്ങണം 
-ഓരങ്ങൾ ഓരോന്നും മൃദുവായി നനയ്ക്കണം  
+തുള്ളിയായി കൂടണം മഴയായി പെയ്യണം
+ഹിമകണമായ് നീ വേരിൽ പടരണം
+പുഴയായി ഒഴുകണം, ഒഴുകിയിറങ്ങണം
+ഓരങ്ങൾ ഓരോന്നും മൃദുവായി നനയ്ക്കണം
 
 മധുകണം നുകരണമോരോ പൂവിലും
 മധുവായ് മാറണം മാനസമേതിലും
-നന്മതൻ പൂമ്പൊടി പരക്കണം പരത്തണം 
-ചുറ്റിലും പിന്നെ നീയെത്തിടും നാട്ടിലും 
+നന്മതൻ പൂമ്പൊടി പരക്കണം പരത്തണം
+ചുറ്റിലും പിന്നെ നീയെത്തിടും നാട്ടിലും
 
 ചിറകുകൾ എപ്പോളും ആകാശം കീറണം
 വേരുകൾ ആഴണം നീരിലേക്കിറങ്ങണം`
@@ -625,6 +632,7 @@ Third paragraph of the story...`
     const words = (t) => t.trim().split(/\s+/).length;
     const minutes = (t) => Math.max(1, Math.round(words(t) / 230));
     const langAttr = (w) => w.lang ? ` lang="${esc(w.lang)}"` : '';
+    const writer = (w) => (w.author && w.author.trim()) || author.byline;
     const typeset = (t) => t
       .replace(/(^|[\s(\[])"/g, '$1“').replace(/"/g, '”')
       .replace(/(^|[\s(\[])'/g, '$1‘').replace(/'/g, '’')
@@ -659,7 +667,10 @@ Third paragraph of the story...`
         <li>
           <button data-open="${esc(w.id)}" class="card">
             <span class="card-head">
-              <span class="card-title"${langAttr(w)}>${esc(typeset(w.title))}</span>
+              <span class="card-heading">
+                <span class="card-title"${langAttr(w)}>${esc(typeset(w.title))}</span>
+                <span class="card-author">By ${esc(typeset(writer(w)))}</span>
+              </span>
               <span class="card-date">${fmtDate(w.date)}</span>
             </span>
             <span class="card-excerpt${w.type === 'poems' && !w.lang ? ' is-poem' : ''}"${langAttr(w)}>${esc(typeset(excerpt(w)))}</span>
@@ -719,6 +730,7 @@ Third paragraph of the story...`
             <span>${minutes(w.body)} min read</span>
           </p>
           <h2 id="reader-title" class="piece-title"${langAttr(w)}>${esc(typeset(w.title))}</h2>
+          <p class="piece-author">By ${esc(typeset(writer(w)))}</p>
         </header>
         ${renderBody(w)}
         <footer class="piece-footer">
@@ -733,7 +745,7 @@ Third paragraph of the story...`
       reader.scrollTop = 0;
       readerBody.classList.remove('reader-enter'); void readerBody.offsetWidth; readerBody.classList.add('reader-enter');
       document.body.style.overflow = 'hidden';
-      document.title = `${w.title} — ${author.name}`;
+      document.title = `${w.title} — ${writer(w)}`;
       if (push) history.pushState(null, '', '#' + w.id);
       updateProgress();
       $('#reader-close').focus({ preventScroll: true });
